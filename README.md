@@ -11,6 +11,7 @@ Output information (inspired by the output of `vulkaninfo`) about Vulkan:
 - Instance Extensions
 - Surfaces
 - Physical Devices
+
 to a specified `outputHandler`.
 
 The `outputHandler` receives a multiline, `\n`-separated string.
@@ -22,7 +23,7 @@ A rough attempt at implementing the rules for determining [Vulkan Render Pass Co
 > Framebuffers and graphics pipelines are created based on a specific render pass object. They **must** only be used with that render pass object, or one compatible with it.
 
 Construct a `VkhRenderpassCompat` by passing in the `vk::RenderPassCreateInfo` used to create
-a renderpass. `VkhRenderpassCompat` will make a deep copy of the `vk::RenderPassCreateInfo`
+a render pass. `VkhRenderpassCompat` will make a deep copy of the `vk::RenderPassCreateInfo`
 information.
 
 A `VkhRenderpassCompat` instance can be compared for compatibility with another via:
