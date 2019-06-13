@@ -1,6 +1,10 @@
 # vulkan-helpers
 Small helper classes for Vulkan C++ apps
 
+- [Requirements](#requirements)
+- [VkhInfo](#vkhinfo)
+- [VkhRenderPassCompat](#vkhrenderpasscompat)
+
 ## Requirements
 - C++11 compiler
 - Vulkan SDK / headers, with `vulkan.hpp`
