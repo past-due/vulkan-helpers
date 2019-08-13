@@ -1,6 +1,6 @@
 //
 // VkhRenderPassCompat
-// Version: 0.9
+// Version: 0.9.1
 //
 // Copyright (c) 2019 past-due
 //
@@ -10,6 +10,7 @@
 // See accompanying file LICENSE or copy at https://opensource.org/licenses/MIT
 //
 
+#define VULKAN_HPP_TYPESAFE_CONVERSION 1
 #include "vkh_renderpasscompat.hpp"
 
 #include <algorithm>

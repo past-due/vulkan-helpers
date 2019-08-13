@@ -1,6 +1,6 @@
 //
 // VkhInfo
-// Version: 1.0
+// Version: 1.0.1
 //
 // Copyright (c) 2019 past-due
 //
@@ -12,7 +12,15 @@
 
 #pragma once
 
+#if defined( _MSC_VER )
+#pragma warning( push )
+#pragma warning( disable : 4191 ) // warning C4191: '<function-style-cast>': unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vk<...>'
+#endif
+#define VULKAN_HPP_TYPESAFE_CONVERSION 1
 #include <vulkan/vulkan.hpp>
+#if defined( _MSC_VER )
+#pragma warning( pop )
+#endif
 
 #include <string>
 #include <functional>
@@ -31,7 +39,7 @@ public:
 public:
 
 	void Output_InstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
-	
+
 	void Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface, const vk::DispatchLoaderDynamic& vkDynLoader);
 
 	// If `getProperties2` is true, the instance `inst` *must* have been created with the "VK_KHR_get_physical_device_properties2" extension enabled

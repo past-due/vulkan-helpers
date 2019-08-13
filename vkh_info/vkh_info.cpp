@@ -1,6 +1,6 @@
 //
 // VkhInfo
-// Version: 1.0
+// Version: 1.0.1
 //
 // Copyright (c) 2019 past-due
 //
@@ -10,6 +10,7 @@
 // See accompanying file LICENSE or copy at https://opensource.org/licenses/MIT
 //
 
+#define VULKAN_HPP_TYPESAFE_CONVERSION 1
 #include "vkh_info.hpp"
 
 #include <sstream>
@@ -27,7 +28,7 @@ bool VkhInfo::getInstanceExtensions(std::vector<VkExtensionProperties> &output, 
 {
 	if (!_vkGetInstanceProcAddr) return false;
 
-	PFN_vkEnumerateInstanceExtensionProperties _vkEnumerateInstanceExtensionProperties = reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(_vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceExtensionProperties"));
+	PFN_vkEnumerateInstanceExtensionProperties _vkEnumerateInstanceExtensionProperties = reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceExtensionProperties")));
 	if (!_vkEnumerateInstanceExtensionProperties)
 	{
 		// Could not find symbol: vkEnumerateInstanceExtensionProperties
@@ -116,6 +117,7 @@ void VkhInfo::Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice
 	}
 }
 
+// If `getProperties2` is true, the instance `inst` *must* have been created with the "VK_KHR_get_physical_device_properties2" extension enabled
 void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getProperties2, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	std::stringstream buf;
@@ -315,10 +317,10 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 
 		bool instance_Supports_physical_device_properties2_extension = supportsInstanceExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, vkDynLoader.vkGetInstanceProcAddr);
 		bool physicalDevice_Supports_physical_device_properties2_extension =
-			std::find_if(deviceExtensionProperties.begin(), deviceExtensionProperties.end(),
-						[](const vk::ExtensionProperties& props) {
-							return (strcmp(props.extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0);
-						}) != deviceExtensionProperties.end();
+		std::find_if(deviceExtensionProperties.begin(), deviceExtensionProperties.end(),
+					 [](const vk::ExtensionProperties& props) {
+						 return (strcmp(props.extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0);
+					 }) != deviceExtensionProperties.end();
 
 		if (getProperties2 && instance_Supports_physical_device_properties2_extension && physicalDevice_Supports_physical_device_properties2_extension)
 		{
@@ -331,8 +333,8 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 				vk::PhysicalDevicePushDescriptorPropertiesKHR,
 				vk::PhysicalDeviceMaintenance3Properties
 				>(vkDynLoader);
-				pushDescriptorProps = properties2Chain.get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
-				maintenance3Properties = properties2Chain.get<vk::PhysicalDeviceMaintenance3Properties>();
+				pushDescriptorProps = properties2Chain.template get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
+				maintenance3Properties = properties2Chain.template get<vk::PhysicalDeviceMaintenance3Properties>();
 			}
 			else
 			{
@@ -341,8 +343,8 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 				vk::PhysicalDevicePushDescriptorPropertiesKHR,
 				vk::PhysicalDeviceMaintenance3Properties
 				>(vkDynLoader);
-				pushDescriptorProps = properties2Chain.get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
-				maintenance3Properties = properties2Chain.get<vk::PhysicalDeviceMaintenance3Properties>();
+				pushDescriptorProps = properties2Chain.template get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
+				maintenance3Properties = properties2Chain.template get<vk::PhysicalDeviceMaintenance3Properties>();
 			}
 
 			// VkPhysicalDevicePushDescriptorProperties
