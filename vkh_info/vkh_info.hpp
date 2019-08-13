@@ -1,6 +1,6 @@
 //
 // VkhInfo
-// Version: 1.0.1
+// Version: 1.1
 //
 // Copyright (c) 2019 past-due
 //
